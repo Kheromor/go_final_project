@@ -53,6 +53,14 @@ func TestNextDate(t *testing.T) {
 		}
 	}
 	check()
+
+	today := time.Now().Format("20060102")
+	urlPath := fmt.Sprintf("api/nextdate?date=%s&repeat=y", url.QueryEscape(today))
+	get, err := getBody(urlPath)
+	assert.NoError(t, err)
+	next := strings.TrimSpace(string(get))
+	assert.Equal(t, time.Now().AddDate(1, 0, 0).Format("20060102"), next)
+
 	if !FullNextDate {
 		return
 	}
