@@ -26,8 +26,14 @@ jobs:
 
     - name: Run local server
       run: |
-        CGO_ENABLED=0 GOOS=linux go run main.go &
-        sleep 100
-        go test -run ^TestApp$ ./tests
+        export TODO_PORT=7541
+        CGO_ENABLED=0 GOOS=linux go run main.go > /tmp/todo-server.log 2>&1 &
+        SERVER_PID=$!
+        for i in $(seq 1 30); do
+          curl -sf "http://localhost:${TODO_PORT}/login.html" >/dev/null && break
+          sleep 1
+        done
+        TODO_PORT=${TODO_PORT} go test -run ^TestApp$ ./tests
+        kill $SERVER_PID || true
         
         
