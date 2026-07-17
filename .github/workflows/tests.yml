@@ -26,7 +26,7 @@ jobs:
 
     - name: Run local server
       run: |
-        export TODO_PORT=7541
+        export TODO_PORT=7540
         CGO_ENABLED=0 GOOS=linux go run main.go > /tmp/todo-server.log 2>&1 &
         SERVER_PID=$!
         for i in $(seq 1 30); do
